@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snowboard Sidecut Radius Calculator</title>
+    <script>
+        function calculateRadius() {
+            // Get input values
+            const edgeLength = parseFloat(document.getElementById('edgeLength').value);
+            const tipWidth = parseFloat(document.getElementById('tipWidth').value);
+            const waistWidth = parseFloat(document.getElementById('waistWidth').value);
+            const tailWidth = parseFloat(document.getElementById('tailWidth').value);
+            
+            // Calculate the sidecut radius
+            const a = distance([0, tipWidth/2], [edgeLength/2, waistWidth/2]);
+            const b = distance([edgeLength/2, waistWidth/2], [edgeLength, tailWidth/2]);
+            const c = distance([0, tipWidth/2], [edgeLength, tailWidth/2]);
+            const s = (a + b + c) / 2;
+            const triangleArea = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+            const radius = (a * b * c) / (4 * triangleArea);
+            
+            // Display the result
+            document.getElementById('result').innerText = 'Sidecut Radius: ' + (radius / 100).toFixed(2) + ' meters';
+        }
+
+        function distance(p1, p2) {
+            return Math.sqrt((p2[0] - p1[0])**2 + (p2[1] - p1[1])**2);
+        }
+    </script>
+</head>
+<body>
+    <h2>Snowboard Sidecut Radius Calculator</h2>
+    <form onsubmit="event.preventDefault(); calculateRadius();">
+        <label for="edgeLength">Effective Edge Length (cm):</label>
+        <input type="number" step="0.1" id="edgeLength" required><br><br>
+        
+        <label for="tipWidth">Tip Width (cm):</label>
+        <input type="number" step="0.1" id="tipWidth" required><br><br>
+        
+        <label for="waistWidth">Waist Width (cm):</label>
+        <input type="number" step="0.1" id="waistWidth" required><br><br>
+        
+        <label for="tailWidth">Tail Width (cm):</label>
+        <input type="number" step="0.1" id="tailWidth" required><br><br>
+        
+        <input type="submit" step="0.1" value="Calculate">
+    </form>
+    <p id="result"></p>
+</body>
+</html>
