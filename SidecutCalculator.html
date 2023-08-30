@@ -21,7 +21,14 @@
             const radius = (a * b * c) / (4 * triangleArea);
             
             // Display the result
-            document.getElementById('result').innerText = 'Sidecut Radius: ' + (radius / 100).toFixed(2) + ' meters';
+            if (isNaN(radius))
+            {
+                document.getElementById('result').innerText = 'not sure yet...'
+            }
+            else
+            {
+                document.getElementById('result').innerText = (radius / 100).toFixed(2) + ' meters';
+            }
         }
 
         function distance(p1, p2) {
@@ -32,20 +39,39 @@
 <body>
     <h2>Snowboard Sidecut Radius Calculator</h2>
     <form onsubmit="event.preventDefault(); calculateRadius();">
-        <label for="edgeLength">Effective Edge Length (cm):</label>
-        <input type="number" step="0.1" id="edgeLength" required><br><br>
-        
-        <label for="tipWidth">Tip Width (cm):</label>
-        <input type="number" step="0.1" id="tipWidth" required><br><br>
-        
-        <label for="waistWidth">Waist Width (cm):</label>
-        <input type="number" step="0.1" id="waistWidth" required><br><br>
-        
-        <label for="tailWidth">Tail Width (cm):</label>
-        <input type="number" step="0.1" id="tailWidth" required><br><br>
-        
-        <input type="submit" step="0.1" value="Calculate">
+        <table cellpadding="5">
+            <tr style="font-weight:bold">
+                <td>Parameter</td>
+                <td>Value</td>
+                <td>Units</td>
+            </tr>
+            
+            <tr>
+                <td><label for="edgeLength">Effective Edge Length</label></td>
+                <td><input type="number" step="0.01" id="edgeLength" required onchange="calculateRadius()"></td>
+                <td>cm</td>
+            </tr>
+            <tr>
+                <td><label for="tipWidth">Tip Width</label>
+                <td><input type="number" step="0.01" id="tipWidth" required onchange="calculateRadius()"></td>
+                <td>cm</td>
+            </tr>
+            <tr>
+                <td><label for="waistWidth">Waist Width</label>
+                <td><input type="number" step="0.01" id="waistWidth" required onchange="calculateRadius()"></td>
+                <td>cm</td>
+            </tr>
+            <tr>
+                <td><label for="tailWidth">Tail Width</label>
+                <td><input type="number" step="0.01" id="tailWidth" required onchange="calculateRadius()"></td>
+                <td>cm</td>
+            </tr>
+            <tr style="font-weight:bold">
+                <td>Sidecut Radius</td>
+                <td id="result"></td>
+                <td>m</td>
+            </tr>
+        </table>
     </form>
-    <p id="result"></p>
 </body>
 </html>
