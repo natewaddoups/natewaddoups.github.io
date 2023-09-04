@@ -5,29 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snowboard Sidecut Radius Calculator</title>
     <script>
-        function calculateRadius() {
+        function recalculate() {
             // Get input values
             const edgeLength = parseFloat(document.getElementById('edgeLength').value);
             const tipWidth = parseFloat(document.getElementById('tipWidth').value);
             const waistWidth = parseFloat(document.getElementById('waistWidth').value);
             const tailWidth = parseFloat(document.getElementById('tailWidth').value);
+            const edgeAngle = parseFloat(document.getElementById('edgeAngle').value);
             
-            // Calculate the sidecut radius
+            // Calculate the sidecut radius. This looks bogus but it works.
+            // https://math.stackexchange.com/questions/133638/how-does-this-equation-to-find-the-radius-from-3-points-actually-work
             const a = distance([0, tipWidth/2], [edgeLength/2, waistWidth/2]);
             const b = distance([edgeLength/2, waistWidth/2], [edgeLength, tailWidth/2]);
             const c = distance([0, tipWidth/2], [edgeLength, tailWidth/2]);
             const s = (a + b + c) / 2;
             const triangleArea = Math.sqrt(s * (s - a) * (s - b) * (s - c));
-            const radius = (a * b * c) / (4 * triangleArea);
+            const radius = ((a * b * c) / (4 * triangleArea)) / 100 // in meters
+
+            // And how does it carve?
+            const angleRadians = edgeAngle * Math.PI / 180;
+            const carveRadius = radius * Math.cos(angleRadians) 
+            const speed = Math.sqrt(carveRadius * Math.sin(angleRadians) * 9.8) // in meters / second
+            const kph = speed * 3.6
             
             // Display the result
             if (isNaN(radius))
             {
-                document.getElementById('result').innerText = 'not sure yet...'
+                document.getElementById('result').innerText = 'not sure yet'
             }
             else
             {
-                document.getElementById('result').innerText = (radius / 100).toFixed(2) + ' meters';
+                document.getElementById('result').innerText = radius.toFixed(2);
+            }
+
+            if (isNaN(carveRadius))
+            {
+                document.getElementById('carveRadius').innerText = 'could be anything'
+                document.getElementById('speedKph').innerText = ''
+                document.getElementById('speedMph').innerText = ''
+            }
+            else
+            {
+                document.getElementById('carveRadius').innerText = carveRadius.toFixed(2);
+                document.getElementById('speedKph').innerText = kph.toFixed(2);
+                document.getElementById('speedMph').innerText = (kph * 0.621371).toFixed(2);
             }
         }
 
@@ -40,7 +61,7 @@
     <h2>Snowboard Sidecut Radius Calculator</h2>
     <p>(Also works for skis.)</p>
     <p>
-    <form onsubmit="event.preventDefault(); calculateRadius();">
+    <form onsubmit="event.preventDefault(); recalculate();" onload="recalculate();">
         <table cellpadding="5">
             <tr style="font-weight:bold">
                 <td>Parameter</td>
@@ -50,22 +71,22 @@
             
             <tr>
                 <td><label for="edgeLength">Effective Edge Length</label></td>
-                <td><input type="number" step="0.01" id="edgeLength" required onchange="calculateRadius()"></td>
+                <td><input type="number" step="0.01" id="edgeLength" required onchange="recalculate()"></td>
                 <td>cm</td>
             </tr>
             <tr>
                 <td><label for="tipWidth">Tip Width</label>
-                <td><input type="number" step="0.01" id="tipWidth" required onchange="calculateRadius()"></td>
+                <td><input type="number" step="0.01" id="tipWidth" required onchange="recalculate()"></td>
                 <td>cm</td>
             </tr>
             <tr>
                 <td><label for="waistWidth">Waist Width</label>
-                <td><input type="number" step="0.01" id="waistWidth" required onchange="calculateRadius()"></td>
+                <td><input type="number" step="0.01" id="waistWidth" required onchange="recalculate()"></td>
                 <td>cm</td>
             </tr>
             <tr>
                 <td><label for="tailWidth">Tail Width</label>
-                <td><input type="number" step="0.01" id="tailWidth" required onchange="calculateRadius()"></td>
+                <td><input type="number" step="0.01" id="tailWidth" required onchange="recalculate()"></td>
                 <td>cm</td>
             </tr>
             <tr style="font-weight:bold">
@@ -73,8 +94,30 @@
                 <td id="result"></td>
                 <td>m</td>
             </tr>
+            <tr>
+                <td><label for="edgeAngle">Edge Angle</label>
+                <td><input type="number" step="1" id="edgeAngle" required onchange="recalculate()"></td>
+                <td>degrees</td>
+            </tr>
+            <tr style="font-weight:bold">
+                <td>Carve Radius</td>
+                <td id="carveRadius"></td>
+                <td>m</td>
+            </tr>
+            <tr style="font-weight:bold">
+                <td>Speed</td>
+                <td id="speedKph"></td>
+                <td>kph</td>
+            </tr>
+            <tr style="font-weight:bold">
+                <td>Speed</td>
+                <td id="speedMph"></td>
+                <td>mph</td>
+            </tr>
         </table>
     </form>
+
+    <p>If you'd like to know more about the math behind this, see <a href="http://alpinesnowboarder.com/wp-content/uploads/2018/03/Physics-of-a-Snowboard-Carved-Turn.pdf">Physics of a carved snowboard turn</a>.</p>
 
     <div style="position:absolute; bottom: 0;"">Best viewed with NCSA Mosaic.</div>
 </body>
