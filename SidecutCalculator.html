@@ -25,7 +25,7 @@
             // And how does it carve?
             const angleRadians = edgeAngle * Math.PI / 180;
             const carveRadius = radius * Math.cos(angleRadians) 
-            const speed = Math.sqrt(carveRadius * Math.sin(angleRadians) * 9.8) // in meters / second
+            const speed = Math.sqrt(radius * Math.sin(angleRadians) * 9.8) // in meters / second
             const kph = speed * 3.6
             
             // Display the result
