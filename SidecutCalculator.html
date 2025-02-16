@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snowboard Sidecut Radius Calculator</title>
+    <title>Snowboard Sidecut & Carve Radius Calculator</title>
     <script>
         function recalculate() {
             // Get input values
@@ -56,11 +56,45 @@
             return Math.sqrt((p2[0] - p1[0])**2 + (p2[1] - p1[1])**2);
         }
     </script>
+    <style>
+
+.container {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  -ms-box-orient: horizontal;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: flex;
+
+
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.unused {
+    display: flex;
+    flex-direction: row;
+    flex-flow: column wrap;
+}
+
+.chunk {
+    width: 500px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+    </style
 </head>
 <body>
-    <h2>Snowboard Sidecut Radius Calculator</h2>
+    <h2>Snowboard Sidecut & Carve Radius Calculator</h2>
     <p>(Also works for skis.)</p>
     <p>
+
+    <div class="chunk">
     <form onsubmit="event.preventDefault(); recalculate();" onload="recalculate();">
         <table cellpadding="5">
             <tr style="font-weight:bold">
@@ -116,21 +150,13 @@
             </tr>
         </table>
     </form>
+    </div>
 
-    <div style="max-width:500px">
-    <p>If you'd like to know more about the math behind this, see <a href="http://alpinesnowboarder.com/wp-content/uploads/2018/03/Physics-of-a-Snowboard-Carved-Turn.pdf">Physics of a carved snowboard turn</a>.
-        <br>For even more math, check out <a href="https://eprints.whiterose.ac.uk/168379/1/carving.pdf">Balanced carving turns in alpine skiing.</a>
-        <br>If you find yourself thinking that sidecut depth and effective edge length matter more than sidecut radius, see Appendix A of that second paper. Spoiler: The math works out the same.
-    </p>
+<div class="container">
 
-    <p>If you think that Howe's cosine formula isn't accurate for carve radius calculations, check out this quote from the 2nd paper:
-        <blockquote>
-            ...in the field study of turns performed by members of the Norwegian national team, Reid, Haugen, Gilgien, Kipp, and Smith (2020) found a good agreement with equation (33) up to Ψ ≃ 70◦
-        </blockquote>
-    <br>"Equation 33" is that cosine formula, and Ψ is just the edge angle.
-    </p>
-        
-    <p>If you're not into physics and math, here's some stuff to think about...</p>
+
+    <div class="chunk">    
+    <p>Some relationships to bear in mind...</p>
 
     <p><b>Obvious</b></p>
     
@@ -140,17 +166,17 @@
 
     <p>You can't carve a turn whose radius is larger than your board's sidecut radius. You can follow the path of such a turn, but you'll be skidding, not carving.</p>
     
-    <p>If you ride a few boards with different radii, you'll find that shorter radius boards ride best at lower speeds, and larger radius boards ride best at higher speeds. 
+    <p>If you ride a few boards with different radii, you'll find that shorter radius boards are best suited for lower speeds, and larger radius boards are best suited at higher speeds. 
     <ul>
-        <li>Shorter radius boards carve tighter paths, so the faster you go, the more awkward it gets to make tight turns - it's just easier to skid instead. 
-        <li>Longer radius boards carve larger-radius paths, so the slower you go, the more awkward that gets - it's just easier to skid instead.</p>
+        <li>Shorter radius boards carve tighter paths, and the faster you go, the more awkward it gets to carve tight turns - it's just easier to make bigger turns, which require low edge angles, and carving becomes impossible because the centripetal force pushes you out of the groove. 
+        <li>Longer radius boards carve larger-radius paths, so the slower you go, the more awkward that gets. The board won't change direction quickly enough unless you use a very high edge angle, and at low speeds that just means you'll be riding the sidewall. So it's just easier to skid instead.</p>
     </ul>
 
     <p>So, if you're having trouble carving at higher speeds - or if you find yourself subconsciously slowing down before you start carving - a larger sidecut radius might be for you.</p>
     
     <p><b>Less Obvious</b></p>
     
-    <p>For a given carve radius, there is a pretty narrow range of speeds that will let you carve that path. 
+    <p>For a given <i>carve radius</i>, there is a pretty narrow range of speeds that will let you carve that path. 
     <ul>
         <li>Go too slow, and you'll be riding the sidewall, not the base. Or you will fall to the inside.
         <li>Go too fast, and the board will make the turn, but your body won't. 
@@ -159,6 +185,46 @@
     
     <p>If you want to make highly inclined carves where your shoulders are skimming the snow, you might think that a tighter sidecut radius would be better. It turns more tighter and more tighter is more better, right? Not necessarily. When you lean way into a turn, with a tight sidecut, the board whips around in a very tight arc. With a 10m sidecut, it feels like my head stays still and my feet rotate around me. (That's not what really happens. I am exaggerating. But it really does feel that way.) With 13m or 15m sidecut radius, the arc is much larger. It feels more like snowboarding and less like acrobatics.</p>
 
+    </div>
+
+    <div class="chunk">
+
+    <p>If you'd like to know more about the math behind the calculator, see <a href="http://alpinesnowboarder.com/wp-content/uploads/2018/03/Physics-of-a-Snowboard-Carved-Turn.pdf">Physics of a carved snowboard turn</a>. 
+
+    <p>For even more math, check out <a href="https://eprints.whiterose.ac.uk/168379/1/carving.pdf">balanced carving turns in alpine skiing.</a>
+        <p>If you find yourself thinking that sidecut depth and effective edge length matter more than sidecut radius, see Appendix A of that second paper. Spoiler: The math works out the same.
+    </p>
+
+    <p>If you are concerned about the accuracy of Howe's cosine formula, consider this quote from the 2nd paper:
+        <blockquote>
+            ...in the field study of turns performed by members of the Norwegian national team, Reid, Haugen, Gilgien, Kipp, and Smith (2020) found a good agreement with equation (33) up to Ψ ≃ 70◦
+        </blockquote>
+    "Equation 33" is Howe's cosine formula, and Ψ is just the edge angle.
+
+    <p>You may have heard of an attempt to derive carve radius using finite-element-analysis. As noted above, it didn't align well with reality.</p>
+
+    <p>A lot of people greatly over-estimate the role of board stiffness and/or effective edge length in determining sidecut radius. Those parameters do affect how well a board can hold a carve, but they have negligible effect on carve radius. </p>
+    <p>I own two snowboards that are 170cm long and have 13m sidecuts, but the effective adge on one of them is very short - it's a poweder board, so the tip and tail start to curve upward near the bindings. Edge hold is not great on the powder board, but it's still capable of hip-dragging carves when the snow is good, and both boards carve the same paths.
+    </div>
+
+    <div class="chunk">
+        To give you a <i>very</i> rough idea of what boards tend to have what sidecuts...
+        <ul>
+	<li>Freeride snowboards for soft-boot riding typically have a sidecut radius under 10 meters. This makes them agile at low speeds, but twitchy at high speeds.
+        <li>Slalom hard-boot snowboards were typically around 10 meters.
+        <li>Boardercross snowboards typically range from 10-13 meters or so. If you're looking for a soft-boot board that can carve big turns, look into this category - but look at the specs closely because they vary a lot.
+        <li>Giant slalom snowboards are typically around 15-17 meters, however I've been seeing them with sidecuts of 18-20 meters lately.
+        </ul>
+
+	<P>The generalizations above are just generalizations.
+        <br>All generalizations are false.
+        <br>Hopefully those generalizations are helpful.
+        <br>Check the specs before you buy.
+        
+    </div>
+
+</div>
+    <div>
     <br><br><br>    
     <p>Best viewed with NCSA Mosaic.</p>
 
