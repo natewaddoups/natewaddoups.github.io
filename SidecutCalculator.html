@@ -20,35 +20,58 @@
             const c = distance([0, tipWidth/2], [edgeLength, tailWidth/2]);
             const s = (a + b + c) / 2;
             const triangleArea = Math.sqrt(s * (s - a) * (s - b) * (s - c));
-            const radius = ((a * b * c) / (4 * triangleArea)) / 100 // in meters
+            const sidecutRadius = ((a * b * c) / (4 * triangleArea)) / 100 // in meters
 
-            // And how does it carve?
-            const angleRadians = edgeAngle * Math.PI / 180;
-            const carveRadius = radius * Math.cos(angleRadians) 
-            const speed = Math.sqrt(radius * Math.sin(angleRadians) * 9.8) // in meters / second
-            const kph = speed * 3.6
-            
-            // Display the result
-            if (isNaN(radius))
+            if (isNaN(sidecutRadius))
             {
                 document.getElementById('result').innerText = 'not sure yet'
             }
             else
             {
-                document.getElementById('result').innerText = radius.toFixed(2);
+                document.getElementById('result').innerText = sidecutRadius.toFixed(2);
             }
 
-            if (isNaN(carveRadius))
+            // Assuming that the snowboard is on perfect ice, so no trench is formed...
+            const angleRadians = edgeAngle * Math.PI / 180;
+            const carveIceRadius = sidecutRadius * Math.cos(angleRadians) 
+            const speedIce = Math.sqrt(sidecutRadius * Math.sin(angleRadians) * 9.8) // in meters / second
+            const kphIce = speedIce * 3.6 // in kilometers / hour
+
+            if (isNaN(carveIceRadius))
             {
-                document.getElementById('carveRadius').innerText = 'could be anything'
-                document.getElementById('speedKph').innerText = ''
-                document.getElementById('speedMph').innerText = ''
+                document.getElementById('carveIceRadius').innerText = '???'
+                document.getElementById('speedIceKph').innerText = ''
+                document.getElementById('speedIceMph').innerText = ''
             }
             else
             {
-                document.getElementById('carveRadius').innerText = carveRadius.toFixed(2);
-                document.getElementById('speedKph').innerText = kph.toFixed(2);
-                document.getElementById('speedMph').innerText = (kph * 0.621371).toFixed(2);
+                document.getElementById('carveIceRadius').innerText = carveIceRadius.toFixed(2);
+                document.getElementById('speedIceKph').innerText = kphIce.toFixed(2);
+                document.getElementById('speedIceMph').innerText = (kphIce * 0.621371).toFixed(2);
+            }
+
+            // Assuming that the snowboard creates a trench while carving...
+            // https://www.frontiersin.org/journals/sports-and-active-living/articles/10.3389/fspor.2020.00025/full
+            // "This lead Howe to propose Equation 2 to account for non-rigid snow surfaces..."
+            const trenchDepth = parseFloat(document.getElementById('trenchDepth').value) / 100;
+            const sideCamber = (((tipWidth + tailWidth) / 2) - waistWidth) / 200; // TODO: this is an approximation, assuming zero taper
+            const left = sideCamber / Math.cos(angleRadians)
+            const right = trenchDepth * Math.sin(angleRadians)
+            const carveTrenchRadius = ((edgeLength / 100) * (edgeLength / 100)) / (8 * (left + right))
+            const speedTrench = 0 // TBD
+            const kphTrench = speedTrench * 3.6 // in kilometers / hour
+
+            if (isNaN(carveTrenchRadius))
+            {
+                document.getElementById('carveTrenchRadius').innerText = '???'
+                document.getElementById('speedTrenchKph').innerText = ''
+                document.getElementById('speedTrenchMph').innerText = ''
+            }
+            else
+            {
+                document.getElementById('carveTrenchRadius').innerText = carveTrenchRadius.toFixed(2);
+                document.getElementById('speedTrenchKph').innerText = 'TBD' // kphTrench.toFixed(2);
+                document.getElementById('speedTrenchMph').innerText = 'TBD' // (kphTrench * 0.621371).toFixed(2);
             }
         }
 
@@ -100,52 +123,67 @@
             <tr style="font-weight:bold">
                 <td>Parameter</td>
                 <td>Value</td>
+                <td></td>
                 <td>Units</td>
             </tr>
             
             <tr>
                 <td><label for="edgeLength">Effective Edge Length</label></td>
-                <td><input type="number" step="0.01" id="edgeLength" required onchange="recalculate()"></td>
+                <td colspan="2"><input type="number" step="0.01" id="edgeLength" required onchange="recalculate()"></td>
                 <td>cm</td>
             </tr>
             <tr>
                 <td><label for="tipWidth">Tip Width</label>
-                <td><input type="number" step="0.01" id="tipWidth" required onchange="recalculate()"></td>
+                <td colspan="2"><input type="number" step="0.01" id="tipWidth" required onchange="recalculate()"></td>
                 <td>cm</td>
             </tr>
             <tr>
                 <td><label for="waistWidth">Waist Width</label>
-                <td><input type="number" step="0.01" id="waistWidth" required onchange="recalculate()"></td>
+                <td colspan="2"><input type="number" step="0.01" id="waistWidth" required onchange="recalculate()"></td>
                 <td>cm</td>
             </tr>
             <tr>
                 <td><label for="tailWidth">Tail Width</label>
-                <td><input type="number" step="0.01" id="tailWidth" required onchange="recalculate()"></td>
+                <td colspan="2"><input type="number" step="0.01" id="tailWidth" required onchange="recalculate()"></td>
                 <td>cm</td>
             </tr>
             <tr style="font-weight:bold">
                 <td>Sidecut Radius</td>
-                <td id="result"></td>
+                <td  colspan="2" id="result"></td>
                 <td>m</td>
             </tr>
             <tr>
                 <td><label for="edgeAngle">Edge Angle</label>
-                <td><input type="number" step="1" id="edgeAngle" required onchange="recalculate()"></td>
+                <td  colspan="2"><input type="number" step="1" id="edgeAngle" required onchange="recalculate()"></td>
                 <td>degrees</td>
+            </tr>
+            <tr>
+                <td><label for="edgeAngle">Trench Depth</label>
+                <td  colspan="2"><input type="number" step="1" id="trenchDepth" required onchange="recalculate()"></td>
+                <td>cm</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Ice</td>
+                <td>Trench</td>
+                <td></td>
             </tr>
             <tr style="font-weight:bold">
                 <td>Carve Radius</td>
-                <td id="carveRadius"></td>
+                <td id="carveIceRadius"></td>
+                <td id="carveTrenchRadius"></td>
                 <td>m</td>
             </tr>
             <tr style="font-weight:bold">
                 <td>Speed</td>
-                <td id="speedKph"></td>
+                <td id="speedIceKph"></td>
+                <td id="speedTrenchKph"></td>
                 <td>kph</td>
             </tr>
             <tr style="font-weight:bold">
                 <td>Speed</td>
-                <td id="speedMph"></td>
+                <td id="speedIceMph"></td>
+                <td id="speedTrenchMph"></td>
                 <td>mph</td>
             </tr>
         </table>
@@ -154,6 +192,13 @@
 
 <div class="container">
 
+    <div class="chunk">
+        <p>Work in progress... </p>
+        <ul>
+        <li>The math for the "trench" carve radius assumes that the board has zero taper.</p>
+        <li>The math to calculate the speed for a balanced carve on deformable (trenched) snow has not yet been implemented.</p>
+        </ul>
+    </div>
 
     <div class="chunk">    
     <p>Some relationships to bear in mind...</p>
